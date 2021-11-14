@@ -106,14 +106,14 @@ INA226_VBUS         // напряжение шины (0-36в)
 INA226_VSHUNT       // напряжение на шунте
 
 // time - время выборки (накопления сигнала для оцифровки)
-INA226_CONV_140US
-INA226_CONV_204US
-INA226_CONV_332US
-INA226_CONV_588US
-INA226_CONV_1100US
-INA226_CONV_2116US
-INA226_CONV_4156US
-INA226_CONV_8244US
+INA226_CONV_140US   // 140 мкс
+INA226_CONV_204US   // 204 мкс
+INA226_CONV_332US   // 332 мкс
+INA226_CONV_588US   // 588 мкс
+INA226_CONV_1100US  // 1100 мкс
+INA226_CONV_2116US  // 2116 мкс
+INA226_CONV_4156US  // 4156 мкс
+INA226_CONV_8244US  // 8244 мкс
     
 float getShuntVoltage();    // Прочитать напряжение на шунте
 float getVoltage();         // Прочитать напряжение
