@@ -119,7 +119,7 @@ public:
     float getShuntVoltage(void) {
         setCalibration(_cal_value);                             // Принудительное обновление калибровки (на случай внезапного ребута INA219)
         int16_t value = readRegister(INA226_SHUNT_REG_ADDR);    // Чтение регистра напряжения шунта
-        return value * 0.0000025f;                              // LSB = 2.5uV = 0.000025V, умножаем и возвращаем
+        return value * 0.0000025f;                              // LSB = 2.5uV = 0.0000025V, умножаем и возвращаем
     }
     
     // Чтение напряжения
