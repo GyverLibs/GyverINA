@@ -1,3 +1,5 @@
+This is an automatic translation, may be incorrect in some places. See sources and examples!
+
 # GyverINA
 Lightweight library for INA219 and INA226 power-monitor modules
 
