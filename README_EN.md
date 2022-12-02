@@ -310,6 +310,7 @@ void loop() {
 - v1.0
 - v1.1 - fixed varnings, tweaked tabs (AlexGyver)
 - v1.2 - fixed bug in ina226 calculations
+- v1.3 - created define for voltage multiplier
 
 <a id="feedback"></a>
 ## Bugs and feedback

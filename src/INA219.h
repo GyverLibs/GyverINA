@@ -29,19 +29,23 @@
 */
 
 /* Public-определения (константы) */   
-#define INA219_VBUS           true		// Канал АЦП, измеряющий напряжение шины (0-26в)
-#define INA219_VSHUNT         false		// Канал АЦП, измеряющий напряжение на шунте
-#define INA219_RES_9BIT       0b0000	// 9 Бит - 84мкс
-#define INA219_RES_10BIT      0b0001	// 10 Бит - 148мкс 
-#define INA219_RES_11BIT      0b0010	// 11 Бит - 276мкс 
-#define INA219_RES_12BIT      0b0011	// 12 Бит - 532мкс
-#define INA219_RES_12BIT_X2   0b1001	// 12 Бит, среднее из 2х - 1.06 мс
-#define INA219_RES_12BIT_X4   0b1010	// 12 Бит, среднее из 4х - 2.13 мс
-#define INA219_RES_12BIT_X8   0b1011	// 12 Бит, среднее из 8х - 4.26 мс
-#define INA219_RES_12BIT_X16  0b1100	// 12 Бит, среднее из 16х - 8.51 мс
-#define INA219_RES_12BIT_X32  0b1101	// 12 Бит, среднее из 32х - 17.02 мс
-#define INA219_RES_12BIT_X64  0b1110	// 12 Бит, среднее из 64х - 34.05 мс
-#define INA219_RES_12BIT_X128 0b1111	// 12 Бит, среднее из 128х - 68.10 мс
+#define INA219_VBUS            true		// Канал АЦП, измеряющий напряжение шины (0-26в)
+#define INA219_VSHUNT          false	// Канал АЦП, измеряющий напряжение на шунте
+#define INA219_RES_9BIT        0b0000	// 9 Бит - 84мкс
+#define INA219_RES_10BIT       0b0001	// 10 Бит - 148мкс 
+#define INA219_RES_11BIT       0b0010	// 11 Бит - 276мкс 
+#define INA219_RES_12BIT       0b0011	// 12 Бит - 532мкс
+#define INA219_RES_12BIT_X2    0b1001	// 12 Бит, среднее из 2х - 1.06 мс
+#define INA219_RES_12BIT_X4    0b1010	// 12 Бит, среднее из 4х - 2.13 мс
+#define INA219_RES_12BIT_X8    0b1011	// 12 Бит, среднее из 8х - 4.26 мс
+#define INA219_RES_12BIT_X16   0b1100	// 12 Бит, среднее из 16х - 8.51 мс
+#define INA219_RES_12BIT_X32   0b1101	// 12 Бит, среднее из 32х - 17.02 мс
+#define INA219_RES_12BIT_X64   0b1110	// 12 Бит, среднее из 64х - 34.05 мс
+#define INA219_RES_12BIT_X128  0b1111	// 12 Бит, среднее из 128х - 68.10 мс
+
+#ifndef INA219_VBUS_MULTIPLIER
+#define INA219_VBUS_MULTIPLIER 1.0f     // Множитель для напряжения при использовании делителя напряжения на выходах шунта, задавать до подключения GyverINA.h
+#endif
 
 /* Private-определения (адреса) */
 #define INA219_CFG_REG_ADDR   0x00
@@ -111,7 +115,7 @@ public:
     // Чтение напряжения 
     float getVoltage(void) {
         uint16_t value = readRegister(INA219_VBUS_REG_ADDR);    // Чтение регистра напряжения 
-        return (value >> 3) * 0.004f;                           // LSB = 4mV = 0.004V, Сдвигаем значение до 12 бит и умножаем 
+        return (value >> 3) * 0.004f * INA219_VBUS_MULTIPLIER;  // LSB = 4mV = 0.004V, Сдвигаем значение до 12 бит и умножаем 
     }
     
     // Чтение тока
@@ -125,7 +129,7 @@ public:
     float getPower(void) {
         setCalibration(_cal_value);                             // Принудительное обновление калибровки (на случай внезапного ребута INA219)
         uint16_t value = readRegister(INA219_POWER_REG_ADDR);   // Чтение регистра мощности
-        return value * _power_lsb;                              // LSB в 20 раз больше LSB для тока, умножаем возвращаем
+        return value * _power_lsb * INA219_VBUS_MULTIPLIER;     // LSB в 20 раз больше LSB для тока, умножаем возвращаем
     }
 
 private:
