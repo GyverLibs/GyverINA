@@ -53,6 +53,10 @@
 #define INA226_AVG_X512       0b110
 #define INA226_AVG_X1024      0b111
 
+#ifndef INA226_VBUS_MULTIPLIER
+#define INA226_VBUS_MULTIPLIER 1.0f     // Множитель для напряжения при использовании делителя напряжения на выходах шунта, задавать до подключения GyverINA.h
+#endif
+
 /* Private-определения (адреса) */
 #define INA226_CFG_REG_ADDR   0x00
 #define INA226_SHUNT_REG_ADDR 0x01
@@ -125,7 +129,7 @@ public:
     // Чтение напряжения
     float getVoltage(void) {
         uint16_t value = readRegister(INA226_VBUS_REG_ADDR);    // Чтение регистра напряжения
-        return value * 0.00125f;                                // LSB = 1.25mV = 0.00125V, Сдвигаем значение до 12 бит и умножаем
+        return value * 0.00125f * INA226_VBUS_MULTIPLIER;       // LSB = 1.25mV = 0.00125V, Сдвигаем значение до 12 бит и умножаем
     }
     
     // Чтение тока
@@ -139,7 +143,7 @@ public:
     float getPower(void) {
         setCalibration(_cal_value);                             // Принудительное обновление калибровки (на случай внезапного ребута INA219)
         uint16_t value = readRegister(INA226_POWER_REG_ADDR);   // Чтение регистра мощности
-        return value * _power_lsb;                              // LSB в 25 раз больше LSB для тока, умножаем возвращаем
+        return value * _power_lsb * INA226_VBUS_MULTIPLIER;     // LSB в 25 раз больше LSB для тока, умножаем возвращаем
     }
 
 private:
