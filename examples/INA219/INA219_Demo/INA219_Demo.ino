@@ -13,7 +13,7 @@ void setup() {
   Serial.print(F("INA219..."));
 
   // Проверяем наличие и инициализируем INA219
-  if (ina.begin()) {
+  if (ina.begin()) {	// ina.begin(4, 5) // Для ESP32/ESP8266 можно указать пины I2C
     Serial.println(F("connected!"));
   } else {
     Serial.println(F("not found!"));
