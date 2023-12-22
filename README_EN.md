@@ -1,317 +1,333 @@
 This is an automatic translation, may be incorrect in some places. See sources and examples!
 
-# GyverINA
-Lightweight library for INA219 and INA226 power-monitor modules
+# Gyverina
+Light library for Power-monitor modules Ina219 and Ina226
 
-### Compatibility
-Compatible with all Arduino platforms (using Arduino functions)
+## compatibility
+Compatible with all arduino platforms (used arduino functions)
 
 ## Content
-- [Install](#install)
-- [Initialization](#init)
-- [Usage](#usage)
-- [Example](#example)
-- [Versions](#versions)
-- [Bugs and feedback](#feedback)
+- [installation] (# Install)
+- [initialization] (#init)
+- [use] (#usage)
+- [Example] (# Example)
+- [versions] (#varsions)
+- [bugs and feedback] (#fedback)
 
-<a id="install"></a>
+<a id="install"> </a>
 ## Installation
-- The library can be found under the name **GyverINA** and installed through the library manager in:
-    - Arduino IDE
-    - Arduino IDE v2
-    - PlatformIO
-- [Download library](https://github.com/GyverLibs/GyverINA/archive/refs/heads/main.zip) .zip archive for manual installation:
-    - Unzip and put in *C:\Program Files (x86)\Arduino\libraries* (Windows x64)
-    - Unzip and put in *C:\Program Files\Arduino\libraries* (Windows x32)
-    - Unpack and put in *Documents/Arduino/libraries/*
-    - (Arduino IDE) automatic installation from .zip: *Sketch/Include library/Add .ZIP library…* and specify the downloaded archive
-- Read more detailed instructions for installing libraries [here] (https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE% D0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
+- The library can be found by the name ** gyverina ** and installed through the library manager in:
+    - Arduino ide
+    - Arduino ide v2
+    - Platformio
+- [download the library] (https://github.com/gyverlibs/gyverina/archive/refs/heads/main.zip). Zip archive for manual installation:
+    - unpack and put in * C: \ Program Files (X86) \ Arduino \ Libraries * (Windows X64)
+    - unpack and put in * C: \ Program Files \ Arduino \ Libraries * (Windows X32)
+    - unpack and put in *documents/arduino/libraries/ *
+    - (Arduino id) Automatic installation from. Zip: * sketch/connect the library/add .Zip library ... * and specify downloaded archive
+- Read more detailed instructions for installing libraries [here] (https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%BD%D0%BE%BE%BE%BED0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
+### Update
+- I recommend always updating the library: errors and bugs are corrected in the new versions, as well as optimization and new features are added
+- through the IDE library manager: find the library how to install and click "update"
+- Manually: ** remove the folder with the old version **, and then put a new one in its place.“Replacement” cannot be done: sometimes in new versions, files that remain when replacing are deleted and can lead to errors!
 
-<a id="init"></a>
-## Initialization
-### INA219
-```cpp
-INA219 ina219 (Shunt resistance, Maximum prospective current, Address on I2c bus)
 
-INA219 ina219; // Standard valuesCranberries for the INA219 module (0.1 Ohm, 3.2A, address 0x40) - suitable for one module
-INA219 ina219(0x41); // Shunt and max. default current, address 0x41 - suitable for several modules
-INA219 ina219(0.05); // Shunt 0.05 ohm, max. default current and address (3.2A, 0x40) - Doped module or bare m/s
-INA219 ina219(0.05, 2.0); // Shunt 0.05 Ohm, max. expected current 2A, default address (0x40) - Doped module or bare m/s
-INA219 ina219(0.05, 2.0, 0x41); // Shunt 0.05 Ohm, max. expected current 2A, address 0x41 - Doped modules or bare m/s
-```
-### INA226
-```cpp
-INA226 ina226 (Shunt resistance, Maximum prospective current, I2c bus address)
+<a id="init"> </a>
+## initialization
+### ina219
+`` `CPP
+Ina219 ina219 (shunt resistance, maximum expected current, address on the I2C tire)
 
-INA226 ina226; // Standard values ​​for the INA226 module (0.1 ohm, 0.8 A, address 0x40) - suitable for one module
-INA226 ina226(0x41); // Shunt and max. default current, address 0x41 - suitable for several modules
-INA226 ina226(0.05); // Shunt 0.05 ohm, max. default current and address (0.8 A, 0x40) - Finished module or bare m/s
-INA226 ina226(0.05, 1.5); // Shunt 0.05 Ohm, max. expected current 1.5 A, default address (0x40) - Finished module or bare m/s
-INA226 ina226(0.05, 1.5, 0x41); // Shunt 0.05 Ohm, max. expected current 1.5 A, address 0x41 - Doped modules or bare m/s
-```
+Ina219 ina219;// Standard values for the ina219 module (0.1 Ohm, 3.2a, address 0x40) - suitable for one module
+Ina219 ina219 (0x41);// Shunt and Max.default current, address 0x41 is suitable for several modules
+Ina219 ina219 (0.05);// Shunt 0.05 Ohm, max.current and default address (3.2a, 0x40) - a doped module or naked m/s
+Ina219 ina219 (0.05, 2.0);// Shunt 0.05 Ohm, max.Expected current 2A, default address (0x40) - a doped module or naked m/s
+Ina219 ina219 (0.05, 2.0, 0x41);// Shunt 0.05 Ohm, max.Expected current 2A, address 0x41 - Dopilized modules or naked m/s
+`` `
+### ina226
+`` `CPP
+Ina226 Ina226 (shunt resistance, maximum expected current, address on the I2C tire)
 
-<a id="usage"></a>
-## Usage
-### INA219
-```cpp
-boolbegin(); // Initialize the module and check for presence, will return false if INA219 is not found
-void sleep(true / false); // Enable or disable low power mode, depending on the argument
+Ina226 ina226;// Standard values for the ina226 module (0.1 Ohm, 0.8 a, address 0x40) - suitable for one module
+Ina226 ina226 (0x41);// Shunt and Max.default current, address 0x41 is suitable for several modules
+Ina226 ina226 (0.05);// Shunt 0.05 Ohm, max.Current and default address (0.8 A, 0x40) - a doped module or naked m/s
+Ina226 ina226 (0.05, 1.5);// Shunt 0.05 Ohm, max.Expected current 1.5 A, default address (0x40) is a doped module or naked m/s
+Ina226 ina226 (0.05, 1.5, 0x41);// Shunt 0.05 Ohm, max.Expected current 1.5 a, address 0x41 - Doped modules or naked m/s
+`` `
 
-void setResolution(channel, mode); // Set resolution and averaging mode for voltage and current measurements
-// channel - measurement channel
-INA219_VBUS // ADC channel that measures bus voltage (0-26V)
-INA219_VSHUNT // ADC channel that measures shunt voltage
+<a id="usage"> </a>
+## use
+### ina219
+`` `CPP
+Bool Begin ();// Initialization of the module and checking the presence, will return FALSE if INA219 is not found
+VOID Sleep (True / False);// turning on and off the low energy consumption mode, depending on the argument
 
-// mode - operation mode and resolution
-INA219_RES_9BIT // 9 Bit - 84µs
-INA219_RES_10BIT // 10 Bit - 148µs
-INA219_RES_11BIT // 11 Bit - 276µs
-INA219_RES_12BIT // 12 Bit - 532µs
-INA219_RES_12BIT_X2 // 12 bits, average of 2x - 1.06ms
-INA219_RES_12BIT_X4 // 12 bits, average of 4x - 2.13ms
-INA219_RES_12BIT_X8 // 12 bits, average of 8x - 4.26ms
-INA219_RES_12BIT_X16 // 12 bits, average of 16x - 8.51ms
-INA219_RES_12BIT_X32 // 12 bits, average of 32x - 17.02ms
-INA219_RES_12BIT_X64 // 12 bits, average of 64x - 34.05ms
-INA219_RES_12BIT_X128 // 12 bits, average of 128x - 68.10ms
+VOID Setresolution (Channel, Mode);// Installation of permission and averaging mode for measuring voltage and current
+// Channel - measurement channel
+Ina219_vbus // Channel ADC, measuring the tire voltage (0-26V)
+Ina219_vshunt // Channel ADC, which measures the voltage in shunt
 
-float getShuntVoltage(); // Read shunt voltage
-float getVoltage(); // Read voltage
-float getCurrent(); // Read current
-float getPower(); // Read power
+// mode - mode of operation and resolution
+Ina219_res_9bit // 9 bit - 84Mks
+Ina219_res_10bit // 10 bit - 148MKS
+Ina219_res_11BIT // 11 bit - 276MKS
+Ina219_res_12BIT // 12 bit - 532MKS
+Ina219_res_12bit_x2 // 12 bit, average of 2x - 1.06 ms
+Ina219_res_12bit_x4 // 12 bits, average of 4x - 2.13 ms
+Ina219_res_12bit_x8 // 12 bit, average of 8x - 4.26 ms
+Ina219_res_12bit_x16 // 12 bits, average of 16x - 8.51 ms
+Ina219_res_12bit_x32 // 12 bits, average of 32x - 17.02 ms
+Ina219_res_12bit_x64 // 12 bits, average of 64x - 34.05 ms
+Ina219_res_12bit_x128 // 12 bit, average of 128x - 68.10 ms
 
-uint16_t getCalibration(); // Read calibration value (calculated automatically after start)
-void setCalibration(calibration value); // Write calibration value (you can store it in EEPROM)
-void adjCalibration(calibration offset); // Twist the calibration value to the specified value (can be changed on the go)
-```
-### INA226
-```cpp
-boolbegin(); // Initialize the module and check for presence, will return false if INA226 is not found
-void sleep(true / false); // Enable or disable low power mode depending on the argument
+Float Getshuntvoltage ();// Read the voltage in shunt
+Float getvoltage ();// Read the voltage
+Float getcurrent ();// Read the current
+Float getpower ();// Read power
 
-void setAveraging(avg); // Set the number of measurement averages (see table below)
-INA226_AVG_X1
-INA226_AVG_X4
-INA226_AVG_X16
-INA226_AVG_X64
-INA226_AVG_X128
-INA226_AVG_X256
-INA226_AVG_X512
-INA226_AVG_X1024
+uint16_t getcalibration ();// read the calibration value (after the start is calculated automatically)
+Void setcalibration (Calibration Value);// write down the calibration value (you can store it in EEPROM)
+Void Adjcalibration (Calibration Offseet);// twist the calibration value to the indicated value (can be changed on the go)
+`` `
+### ina226
+`` `CPP
+Bool Begin ();// Initialization of the module and checking the presence, will return FALSE if INA226 is not found
+VOID Sleep (True / False);// turning on and off the low energy consumption mode depending on the argument
 
-void setSampleTime(channel, time); // Set voltage and current sampling time (INA226_VBUS / INA226_VSHUNT), default INA226_CONV_1100US
-// channel - measurement channel
-INA226_VBUS // bus voltage (0-36v)
-INA226_VSHUNT // shunt voltage
+VOID setaveraging (AVG);// Installation of the number of measurement averages (see table below)
+Ina226_avg_x1
+Ina226_Avg_x4
+Ina226_Avg_x16
+Ina226_Avg_x64
+Ina226_Avg_x128
+Ina226_avg_x256
+Ina226_avg_x512
+Ina226_Avg_x1024
 
-// time - sampling time (accumulativesignal for digitization)
-INA226_CONV_140US // 140 µs
-INA226_CONV_204US // 204 µs
-INA226_CONV_332US // 332 µs
-INA226_CONV_588US // 588 µs
-INA226_CONV_1100US // 1100 µs
-INA226_CONV_2116US // 2116 µs
-INA226_CONV_4156US // 4156 µs
-INA226_CONV_8244US // 8244 µs
+VOID setsampletime (Channel, Time);// Installation of voltage and current sampling time (Ina226_vbus / ina226_vshunt), by default INA226_CONV_1100us
+// Channel - measurement channel
+Ina226_vbus // tire voltage (0-36V)
+Ina226_vshunt // Schunt voltage
+
+// time - sample time (signal accumulation for digitization)
+Ina226_conv_140us // 140 μs
+Ina226_conv_204us // 204 μs
+Ina226_conv_332us // 332 μs
+Ina226_Conv_588us // 588 μs
+Ina226_Conv_1100us // 1100 μs
+Ina226_Conv_2116us // 2116 μs
+Ina226_Conv_4156us // 4156 μs
+Ina226_conv_8244us // 8244 μs
     
-float getShuntVoltage(); // Read shunt voltage
-float getVoltage(); // Read voltage
-float getCurrent(); // Read current
-float getPower(); // Read power
+Float Getshuntvoltage ();// Read the voltage in shunt
+Float getvoltage ();// Read the voltage
+Float getcurrent ();// Read the current
+Float getpower ();// Read power
 
-uint16_t getCalibration(); // Read calibration value (calculated automatically after start)
-void setCalibration(calibration value); // Write calibration value (you can store it in EEPROM)
-void adjCalibration(calibration offset); // Twist the calibration value to the specified value (can be changed on the go)
-```
+uint16_t getcalibration ();// read the calibration value (after the start is calculated automatically)
+Void setcalibration (Calibration Value);// write down the calibration value (you can store it in EEPROM)
+Void Adjcalibration (Calibration Offseet);// twist the calibration value to the indicated value (can be changed on the go)
+`` `
 
-<a id="example"></a>
+<a id="EXAMPLE"> </a>
 ## Example
-See **examples** for other examples!
+The rest of the examples look at ** Examples **!
 
 <details>
-<summary>INA219</summary>
+<summary> ina219 </summary>
 
-```cpp
-#include <GyverINA.h>
+`` `CPP
+#include <gyverina.h>
 
-// Create an object: INA219 ina(Shunt resistance, Max expected current, I2c address);
-// INA219 ina(0x41); // Standard settings for the module, but changed address
-// INA219 ina(0.05f); // Standard address and max. current but different shunt (0.05 ohm)
-// INA219 ina(0.05f, 2.0f); // Standard address, but different shunt (0.05 ohm) and max. prospective current (2A)
-// INA219 ina(0.05f, 2.0f, 0x41); // Fully customizable option, manual specification of parameters
-INA219ina; // Standard set of parameters for the Arduino module (0.1, 3.2, 0x40)
+// Create Object: Ina219 Ina (Shunt resistance, Max. Expected current, I2C address);
+// ina219 ina (0x41);// standard settings for the module, but a modified address
+// ina219 ina (0.05F);// standard address and max.current, but another shunt (0.05Cranberries om)
+// ina219 ina (0.05F, 2.0F);// standard address, but another shunt (0.05 Ohms) and Max.Expected current (2A)
+// ina219 ina (0.05f, 2.0f, 0x41);// Fully adjustable option, manual indication of parameters
+Ina219 ina;// Standard set of parameters for Arduino module (0.1, 3.2, 0x40)
 
-void setup() {
-  // Open serial port
-  Serial.begin(9600);
-  Serial.print(F("INA219..."));
+VOID setup () {
+  // Open the sequential port
+  Serial.Begin (9600);
+  Serial.print ("ina219 ..."));
 
-  // Check for presence and initialize INA219
-  if (ina.begin()) {
-    Serial.println(F("connected!"));
+  // Check the availability and initialize ina219
+  if.Begin ()) {
+    Serial.println (F ("Connected!"));
   } else {
-    Serial.println(F("not found!"));
-    while(1);
+    Serial.println (f ("not found!"));
+    While (1);
   }
 
-  // Can be put to sleep by calling .sleep with a true argument to wake upfishing - call again with indication false
-  // ina.sleep(true); // Put INA219 to sleep
-  // ina.sleep(false); // Wake up INA219
+  // you can rope into sleep mode by calling .Sleep with the True argument, to wake up, we call again with FALSE.
+  // ina.sleep (true);// Esphy Ina219
+  // ina.sleep (false);// Wake in Ina219
 
-  // INA219 has built-in calibration for current measurement, using a special calibration value
-  // After starting, the library will automatically calculate and write the calibration value based on the entered data
-  // The resulting value can be read using the .getCalibration() method; to change and/or save to EEPROM
-  Serial.print(F("Calibration value: ")); Serial.println(ina.getCalibration());
-  // Further, the obtained value can be changed to adjust to the actual resistance of the shunt and stored in EEPROM
-  // To write the calibration value to the INA219 there is a method .setCalibration(value);
-  // ina.setCalibration(ina.getCalibration() + 10); // Read-modify-write calibration value
-  // Also, you can use the .adjCalibration(offset); for calibration adjustment without direct reading
-  //ina.adjCalibration(10); // Increase calibration value by 10
-  // ina.adjCalibration(-20); // Decrease calibration value by 20
-  // It is possible to store in EEPROM and load into INA219 exactly the calibration offset instead of a direct value
+  // Ina219 has the ability to integrated calibration of current measurement, using a special calibration value
+  // After starting, the library will automatically calculate and record the calibration value based on the entered data
+  // the resulting value can be read using the .getcalibration () method;To change and/or conservation in EEPROM
+  Serial.print ("Calibration value:"));Serial.println (ina.getcalibration ());
+  // Next, the resulting value can be changed for adjustment to the real resistance of the shunt and saved in EEPROM
+  // to record the calibration value in INA219, there is a method. SetCalibration (Value);
+  // ina.setcalibration (ina.getcalibration () + 10);// Read-modify the calibration value
+  // also, you can use the method of .adjcalibration (Offset);to adjust calibration without direct reading
+  // ina.adjcalibration (10);// increase the calibration value by 10
+  // ina.adjcalibration (-20);// Reduce the calibration value by 20
+  // can be stored in EEPROM and uploaded to INA219 precisely the displacement of calibration instead of a direct value
 
-  // It is also possible to select the resolution of the ADC (9-12 bits) and enable the built-in averaging of measurements
-  // Select settings for voltage and current measurement separated and defined by INA219_VBUS or INA219_VSHUNT constants
-  // Averaging increases measurement time by reducing measurement noise, only available for 12-bit mode
-  // ina.setResolution(INA219_VBUS, INA219_RES_10BIT); // Measure voltage in 10 bit mode, 12 bit by default
-  // Using a lower resolution speeds up measurements (see table in INA219.h), but is NOT recommended
-  // Use of built-in averaging is highly recommended to increase the stability of readings on a noisy load
-  ina.setResolution(INA219_VBUS, INA219_RES_12BIT_X4); // Napdressing in 12-bit mode + 4x averaging
-  ina.setResolution(INA219_VSHUNT, INA219_RES_12BIT_X128); // Current in 12-bit mode + 128x average
+  // It is also possible to choose a resolution of ADC (9-12 bits) and enable the built-in averaging measurements
+  // The selection of settings for measuring voltage and current are divided and determined by the constants ina219_vbus or ina219_vshunt
+  // Avoiding increases measurement time, reducing measurement noise, is available only for 12 bit mode
+  // ina.setresolution (ina219_vbus, ina219_res_10bit);// Measure voltage in 10 bit mode, 12 bits by default
+  // Using a reduced resolution accelerates the measurement (see table in Ina219.h), but not recommended
+  // The use of built -in averaging is extremely recommended to increase the stability of indications on the noisy load
+  Ina.Setresolution (Ina219_vbus, Ina219_res_12BIT_X4);// voltage in 12 bit mode + 4 -multiple averaging
+  Ina.Setresolution (Ina219_vshunt, Ina219_res_12BIT_X128);// current in 12 bit mode + 128x multiple averages
   
-  Serial.println("");
+  Serial.println ("");
 }
 
-void loop() {
-  // Read voltage
-  Serial.print(F("Voltage: "));
-  Serial.print(ina.getVoltage(), 3);
-  Serial.println(F("V"));
+VOID loop () {
+  // read tension
+  Serial.print ("voltage:"));
+  Serial.print (ina.getvoltage (), 3);
+  Serial.println ("v"));
 
-  // Read the current
-  Serial.print(F("Current: "));
-  Serial.print(ina.getCurrent(), 3);
-  Serial.println(F("A"));
+  // read the current
+  Serial.print ("Current:"));
+  Serial.print (ina.getcurrent (), 3);
+  Serial.println ("a"));
 
-  // Read power
-  Serial.print(F("Power: "));
-  Serial.print(ina.getPower(), 3);
-  Serial.println(F("W"));
+  // read power
+  Serial.print ("Power:"));
+  Serial.print (ina.getpower (), 3);
+  Serial.println ("w"));
 
-  // Read the voltage on the shunt
-  Serial.print(F("Shunt voltage: "));
-  Serial.print(ina.getShuntVoltage(), 6);
-  Serial.println(F("V"));
+  // Read the voltage in shunt
+  Serial.print ("shunt voltage:"));
+  Serial.print (ina.getshuntvoltage (), 6);
+  Serial.println ("v"));
 
-  Serial.println("");
-  delay(1000);
+  Serial.println ("");
+  DELAY (1000);
 }
-```
+`` `
 </details>
 <details>
-<summary>INA226</summary>
+<summary> ina226 </summary>
 
-```cpp
-#include <GyverINA.h>
+`` `CPP
+#include <gyverina.h>
 
 /*
-   Attention!!! Shunt voltage measurement limits for INA226 = +/- 81.92 mV
-   When using the INA226 module with a 0.1 Ω shunt, max. the measured current will be I~820mA
-   When using a different shunt, it is recommended to size it so that the voltage drop does not exceed 82mV!
+   Attention!!!The limits of measuring the shunt voltage in INA226 = +/- 81.92 MV
+   When using the INA226 module with a shunt 0.1 ohm max.The measured current will be I ~ 820 mA
+   When using another shunt, it is recommended to calculate it so that the voltage drop does not exceed 82 mv!
 
    Example:
-   Max. prospective current = 5 A
-   Shunt voltage drop limit = 80 mV
-   R shunt = 0.08 V / 5 A = 0.016 ohm
-   The shunt must have a resistance of 0.016 ohm (160 mOhm)
+   Max.expected current = 5 A
+   The limit of the voltage drop in shunt = 80 mV
+   R shunt = 0.08 c / 5 a = 0.016 Ohms
+   Shunt should have a resistance of 0.016 Ohms (16 MOM)
 */
 
-// Create an object: INA226 ina(Shunt resistance, Max expected current, I2c address);
-// INA226 ina(0x41); // Standard settings for the module, but changed address
-// INA226 ina(0.05f); // Standard address and max. current but different shunt (0.05 ohm)
-// INA226 ina(0.05f, 1.5f); // Standard address, but different shunt (0.05 ohm) and max. prospective current (1.5 A)
-// INA226 ina(0.05f, 1.5f, 0x41); // Fully customizable option, manual specification of parameters
-INA226ina; // Standard set of parameters for the Arduino module (0.1, 0.8, 0x40)
+// Create Object: Ina226 Ina (Shunt resistance, maKS.expected current, I2C address);
+// ina226 ina (0x41);// standard settings for the module, but a modified address
+// ina226 ina (0.05F);// standard address and max.current, but another shunt (0.05 Ohms)
+// ina226 ina (0.05F, 1.5F);// standard address, but another shunt (0.05 Ohms) and Max.Expected current (1.5 a)
+// ina226 ina (0.05F, 1.5F, 0x41);// Fully adjustable option, manual indication of parameters
+Ina226 ina;// Standard set of parameters for arduino module (0.1, 0.8, 0x40)
 
-void setup() {
-  // Open serial port
-  Serial.begin(9600);
-  Serial.print(F("INA226..."));
+VOID setup () {
+  // Open the sequential port
+  Serial.Begin (9600);
+  Serial.print ("ina226 ..."));
 
-  // Check for existence and initializeINA226
-  if (ina.begin()) {
-    Serial.println(F("connected!"));
+  // Check the availability and initialize ina226
+  if.Begin ()) {
+    Serial.println (F ("Connected!"));
   } else {
-    Serial.println(F("not found!"));
-    while(1);
+    Serial.println (f ("not found!"));
+    While (1);
   }
 
-  // Can be put to sleep by calling .sleep with an argument of true, to wake it up - call it again with false
-  // ina.sleep(true); // Put INA226 to sleep
-  // ina.sleep(false); // Wake up INA226
+  // you can rope into sleep mode by calling .Sleep with the True argument, to wake up, we call again with FALSE.
+  // ina.sleep (true);// Esphy Ina226
+  // ina.sleep (false);// Wake in ina226
 
-  // INA226 has the ability to calibrate the current measurement internally, using a special calibration value
-  // After starting, the library will automatically calculate and write the calibration value based on the entered data
-  // The resulting value can be read using the .getCalibration() method; to change and/or save to EEPROM
-  Serial.print(F("Calibration value: ")); Serial.println(ina.getCalibration());
-  // Further, the obtained value can be changed to adjust to the actual resistance of the shunt and stored in EEPROM
-  // To write the calibration value to the INA226 there is a method .setCalibration(value);
-  // ina.setCalibration(ina.getCalibration() + 10); // Read-modify-write calibration value
-  // Also, you can use the .adjCalibration(offset); for calibration adjustment without direct reading
-  //ina.adjCalibration(10); // Increase calibration value by 10
-  // ina.adjCalibration(-20); // Decrease calibration value by 20
-  // It is possible to store in EEPROM and load into INA226 exactly the calibration offset instead of a direct value
+  // Ina226 has the ability to integrated calibration of current measurement, using a special calibration value
+  // After starting, the library will automatically calculate and record the calibration value based on the entered data
+  // the resulting value can be read using the .getcalibration () method;To change and/or conservation in EEPROM
+  Serial.print ("Calibration value:"));Serial.println (ina.getcalibration ());
+  // Next, the resulting value can be changed for adjustment to the real resistance of the shunt and saved in EEPROM
+  // to record the calibration value in INA226 there is a method. SetCalibration (Value);
+  // ina.setcalibration (ina.getcalibration () + 10);// Read-modify the calibration value
+  // also, you can use the method of .adjcalibration (Offset);to adjust calibration without direct reading
+  // ina.adjcalibration (10);// increase the calibration value by 10
+  // ina.adjcalibration (-20);// Reduce the calibration value by 20
+  // can be stored in EEPROM and loaded in INA226 precisely the calibration displacement instead of a direct value
 
-  // To improve noise immunity, the INA226 has the ability to adjust the voltage and current sampling times
-  // INA226 will capture a "chunk" of the signal of the selected duration, which will improve accuracy on a noisy signal
-  // By default, sampling takes 1100 µs, but can be changed using the .setSampleTime(channel, time) method;
-  // See table for sampling times (FILE INA226.h)
-  ina.setSampleTime(INA226_VBUS, INA226_CONV_2116US); // Double the voltage sampling time
-  ina.setSampleTime(INA226_VSHUNT, INA226_CONV_8244US); // Increase the current sampling time by 8 times
+  // In order to increase the nozzles of Ina226, it has the ability to configure the time of sample of voltage and current
+  // Ina226 will capture the "piece" of the signal of the selected duration, which will increase the accuracy on the noisy signal
+  // by default, the sample takes 1100 μs, but can be changed by the method of .Setsampletime (channel, time);
+  // Sample time options see the table (file ina226.h)
+  Ina.setsampletime (ina226_vbus, ina226_conv_2116us);// We will increase the voltage sample time
+  Ina.setsampletime (Ina226_vshunt, Ina226_Conv_8244US);// We will increase the time of current sample by 8 times
 
-  // It is also possible to use the built-in sample averaging
-  // Averaging is applied to both voltage and current and proportionally increases the digitization time
-  // Recommended for noisy loads, set by .setAveraging(number of averages) (see table in INA226.h)
-  ina.setAveraging(INA226_AVG_X4); // Turn on the built-in 4x averaging, no averaging by default
+  // It is also possible to use the built -in averaging samples
+  // Availability is used for voltage and for current and proportionally increases digitization time
+  // is recommended on a noisy load, set by the method of .Setaveraaging (number of overalls) (see table in INA226.H)
+  Ina.Setaveraging (ina226_avg_x4);// we turn on the built -in 4 multiple averages, by default there is no averaging
 
-  Serial.println("");
+  Serial.println ("");
 }
 
-void loop() {
-  // Read voltage
-  Serial.print(F("Voltage: "));
-  Serial.print(ina.getVoltage(), 3);
-  Serial.println(F("V"));
+VOID loop () {
+  // read tension
+  Serial.print ("voltage:"));
+  Serial.print (ina.getvoltage (), 3);
+  Serial.println ("v"));
 
-  // Read the current
-  Serial.print(F("Current: "));
-  Serial.print(ina.getCurrent(), 3);
-  Serial.println(F("A"));
+  // read the current
+  Serial.print ("Current:"));
+  Serial.print (ina.getcurrent (), 3);
+  Serial.println ("a"));
 
-  // Read power
-  Serial.print(F("Power: "));
-  Serial.print(ina.getPower(), 3);
-  Serial.println(F("W"));
+  // read power
+  Serial.print ("Power:"));
+  Serial.print (ina.getpower (), 3);
+  Serial.println ("w"));
 
-  // Read the voltage on the shunt
-  Serial.print(F("Shunt voltage: "));
-  Serial.print(ina.getShuntVoltage(), 6);
-  Serial.println(F("V"));
+  // Read the voltage in shunt
+  Serial.print ("shunt voltage:"));
+  Serial.print (ina.getshuntvoltage (), 6);
+  Serial.println ("v"));
 
-  Serial.println("");
-  delay(1000);
+  Serial.println ("");
+  DELAY (1000);
 }
 
-```
+`` `
 </details>
 
-<a id="versions"></a>
-## Versions
-- v1.0
-- v1.1 - fixed varnings, tweaked tabs (AlexGyver)
-- v1.2 - fixed bug in ina226 calculations
+<a id="versions"> </a>
+## versions
+- V1.0
+- v1.1 - fixed boings, combed the tabulation (alexgyver)
+- v1.2 - Fixed error in the calculations ina226
+- V1.2.1 - Small corrections of examples, added the ability to set pins i2C for ESP8266/ESP32 in the Begin methods for INA226 and Ina219
 
-<a id="feedback"></a>
-## Bugs and feedback
-When you find bugs, create an **Issue**, or better, immediately write to the mail [alex@alexgyver.ru](mailto:alex@alexgyver.ru)
-The library is open for revision and your **Pull Request**'s!
+<a id="feedback"> </a>Cranberry
+## bugs and feedback
+Create ** Issue ** when you find the bugs, and better immediately write to the mail [alex@alexgyver.ru] (mailto: alex@alexgyver.ru)
+The library is open for refinement and your ** pull Request ** 'ow!
+
+
+When reporting about bugs or incorrect work of the library, it is necessary to indicate:
+- The version of the library
+- What is MK used
+- SDK version (for ESP)
+- version of Arduino ide
+- whether the built -in examples work correctly, in which the functions and designs are used, leading to a bug in your code
+- what code has been loaded, what work was expected from it and how it works in reality
+- Ideally, attach the minimum code in which the bug is observed.Not a canvas of a thousand lines, but a minimum code
