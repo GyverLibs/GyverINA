@@ -85,10 +85,10 @@ INA219_RES_12BIT_X32    // 12 Бит, среднее из 32х - 17.02 мс
 INA219_RES_12BIT_X64    // 12 Бит, среднее из 64х - 34.05 мс
 INA219_RES_12BIT_X128   // 12 Бит, среднее из 128х - 68.10 мс
 
-float getShuntVoltage();                    // Прочитать напряжение на шунте
-float getVoltage();                         // Прочитать напряжение
-float getCurrent();                         // Прочитать ток
-float getPower();                           // Прочитать мощность
+float getShuntVoltage();                    // Прочитать напряжение на шунте, В
+float getVoltage();                         // Прочитать напряжение,В
+float getCurrent();                         // Прочитать ток, А
+float getPower();                           // Прочитать мощность, Вт
 
 uint16_t getCalibration();                  // Прочитать калибровочное значение (после старта рассчитывается автоматически)
 void setCalibration(calibration value);     // Записать калибровочное значение 	(можно хранить его в EEPROM)	 		
@@ -124,10 +124,10 @@ INA226_CONV_2116US  // 2116 мкс
 INA226_CONV_4156US  // 4156 мкс
 INA226_CONV_8244US  // 8244 мкс
     
-float getShuntVoltage();                    // Прочитать напряжение на шунте
-float getVoltage();                         // Прочитать напряжение
-float getCurrent();                         // Прочитать ток
-float getPower();                           // Прочитать мощность
+float getShuntVoltage();                    // Прочитать напряжение на шунте, В
+float getVoltage();                         // Прочитать напряжение, В
+float getCurrent();                         // Прочитать ток, А
+float getPower();                           // Прочитать мощность, Вт
 
 uint16_t getCalibration();                  // Прочитать калибровочное значение (после старта рассчитывается автоматически)
 void setCalibration(calibration value);     // Записать калибровочное значение 	(можно хранить его в EEPROM)	 		
