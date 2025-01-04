@@ -55,11 +55,11 @@
 class INA219 {
    public:
     // конструктор
-    INA219(const float r_shunt = 0.1f, const float i_max = 3.2f, const uint8_t address = 0x40)
+    INA219(const float r_shunt = 0.1f, const float i_max = 3.2f, const int address = 0x40)
         : _r_shunt(r_shunt), _i_max(i_max), _iic_address(address) {}
 
     // конструктор
-    INA219(const uint8_t address)
+    INA219(const int address)
         : _r_shunt(0.1f), _i_max(3.2f), _iic_address(address) {}
 
     // Инициализация и проверка
