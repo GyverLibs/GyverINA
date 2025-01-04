@@ -64,10 +64,10 @@
 
 class INA226 {
    public:
-    INA226(const float r_shunt = 0.1f, const float i_max = 0.8f, const uint8_t address = 0x40)
+    INA226(const float r_shunt = 0.1f, const float i_max = 0.8f, const int address = 0x40)
         : _r_shunt(r_shunt), _i_max(i_max), _iic_address(address) {}
 
-    INA226(const uint8_t address)
+    INA226(const int address)
         : _r_shunt(0.1f), _i_max(0.8f), _iic_address(address) {}
 
     // Инициализация и проверка
