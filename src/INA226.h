@@ -15,7 +15,7 @@
 
 Методы:
         bool begin();							    // Инициализация модуля и проверка присутствия, вернет false если INA226 не найдена
-        bool begin(SCL, SDA);						// Инициализация модуля для ESP8266/ESP32
+        bool begin(SDA, SCL);						// Инициализация модуля для ESP8266/ESP32
     void sleep(true / false);				    // Включение и выключение режима низкого энергопотребления, в зависимости от аргумента
     void setAveraging(avg);					    // Установка количества усреднений измерений (см. таблицу ниже)
     void setSampleTime(ch, time);			    // Установка времени выборки напряжения и тока (INA226_VBUS / INA226_VSHUNT), по умолчанию INA226_CONV_1100US
@@ -91,8 +91,7 @@ class INA226 {
 
     // Подстройка калибровочного значения
     void adjCalibration(int16_t adj) {
-        setCalibration(getCalibration() + adj);  // Читаем и модифицируем значение
-        _cal_value = _cal_value + adj;           // Обновляем внутреннюю переменную
+        setCalibration(getCalibration() + adj);  // Читаем, модифицируем и обновляем внутреннюю переменную
     }
 
     // Установка калибровочного значения
@@ -110,20 +109,20 @@ class INA226 {
     // Установка встроенного усреднения выборок
     void setAveraging(uint8_t avg) {
         uint16_t cfg_register = readRegister(INA226_CFG_REG_ADDR) & ~(0b111 << 9);  // Читаем конф. регистр, сбросив биты AVG2-0
-        writeRegister(INA226_CFG_REG_ADDR, cfg_register | avg << 9);                // Пишем новое значение конф. регистр
+        writeRegister(INA226_CFG_REG_ADDR, cfg_register | ((avg & 0b111) << 9));    // Пишем новое значение конф. регистр
     }
 
     // Установка разрешения для выбранного канала
     void setSampleTime(bool ch, uint8_t mode) {
         uint16_t cfg_register = readRegister(INA226_CFG_REG_ADDR);  // Читаем конф. регистр
         cfg_register &= ~((0b111) << (ch ? 6 : 3));                 // Сбрасываем нужную пачку бит, в зависимости от канала
-        cfg_register |= mode << (ch ? 6 : 3);                       // Пишем нужную пачку бит, в зависимости от канала
+        cfg_register |= (mode & 0b111) << (ch ? 6 : 3);             // Пишем нужную пачку бит, в зависимости от канала
         writeRegister(INA226_CFG_REG_ADDR, cfg_register);           // Пишем новое значение конф. регистра
     }
 
     // Чтение напряжения на шунте
     float getShuntVoltage(void) {
-        setCalibration(_cal_value);                           // Принудительное обновление калибровки (на случай внезапного ребута INA219)
+        setCalibration(_cal_value);                           // Принудительное обновление калибровки (на случай внезапного ребута INA226)
         int16_t value = readRegister(INA226_SHUNT_REG_ADDR);  // Чтение регистра напряжения шунта
         return value * 0.0000025f;                            // LSB = 2.5uV = 0.0000025V, умножаем и возвращаем
     }
@@ -136,14 +135,14 @@ class INA226 {
 
     // Чтение тока
     float getCurrent(void) {
-        setCalibration(_cal_value);                         // Принудительное обновление калибровки (на случай внезапного ребута INA219)
+        setCalibration(_cal_value);                         // Принудительное обновление калибровки (на случай внезапного ребута INA226)
         int16_t value = readRegister(INA226_CUR_REG_ADDR);  // Чтение регистра тока
         return value * _current_lsb;                        // LSB рассчитывается на основе макс. ожидаемого тока, умножаем и возвращаем
     }
 
     // Чтение мощности
     float getPower(void) {
-        setCalibration(_cal_value);                            // Принудительное обновление калибровки (на случай внезапного ребута INA219)
+        setCalibration(_cal_value);                            // Принудительное обновление калибровки (на случай внезапного ребута INA226)
         uint16_t value = readRegister(INA226_POWER_REG_ADDR);  // Чтение регистра мощности
         return value * _power_lsb;                             // LSB в 25 раз больше LSB для тока, умножаем возвращаем
     }
@@ -168,11 +167,11 @@ class INA226 {
 
     // Чтение 16-ти битного регистра INA219
     uint16_t readRegister(uint8_t address) {
-        Wire.beginTransmission(_iic_address);        // Начинаем передачу
-        Wire.write(address);                         // Отправляем адрес
-        Wire.endTransmission();                      // Заканчиваем передачу
-        Wire.requestFrom(_iic_address, (uint8_t)2);  // Запрашиваем 2 байта
-        return Wire.read() << 8 | Wire.read();       // Клеим и возвращаем результат
+        Wire.beginTransmission(_iic_address);  // Начинаем передачу
+        Wire.write(address);                   // Отправляем адрес
+        Wire.endTransmission();                // Заканчиваем передачу
+        if (Wire.requestFrom(_iic_address, (uint8_t)2) < 2) return 0;
+        return ((uint16_t)Wire.read() << 8) | Wire.read();  // Клеим и возвращаем результат
     }
 
     // Проверка присутствия
@@ -185,9 +184,9 @@ class INA226 {
     void calibrate(void) {
         writeRegister(INA226_CFG_REG_ADDR, 0x8000);  // Принудительный сброс
 
-        _current_lsb = _i_max / 32768.0f;                          // расчёт LSB для тока (см. доку INA219)
-        _power_lsb = _current_lsb * 25.0f;                         // расчёт LSB для мощности (см. доку INA219)
-        _cal_value = trunc(0.00512f / (_current_lsb * _r_shunt));  // расчёт калибровочного значения (см. доку INA219)
+        _current_lsb = _i_max / 32768.0f;                          // расчёт LSB для тока (см. доку INA226)
+        _power_lsb = _current_lsb * 25.0f;                         // расчёт LSB для мощности (см. доку INA226)
+        _cal_value = trunc(0.00512f / (_current_lsb * _r_shunt));  // расчёт калибровочного значения (см. доку INA226)
 
         setCalibration(_cal_value);  // Записываем стандартное калибровочное значение
     }

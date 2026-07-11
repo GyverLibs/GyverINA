@@ -14,8 +14,8 @@
     INA219 ina219 (0.05f, 2.0f, 0x41);	// Шунт 0.05 Ома, макс. ожидаемый ток 2А, адрес 0x41  - Допиленные модули или голые м/с
 
 Методы:
-    bool begin();							    // Инициализация модуля и проверка присутствия, вернет false если INA226 не найдена
-        bool begin(SCL, SDA);						// Инициализация модуля для ESP8266/ESP32
+    bool begin();							    // Инициализация модуля и проверка присутствия, вернет false если INA219 не найдена
+        bool begin(SDA, SCL);						// Инициализация модуля для ESP8266/ESP32
     void sleep(true / false);				    // Включение и выключение режима низкого энергопотребления, в зависимости от аргумента
     void setResolution(channel, mode);		    // Установка разрешения и режима усреднения для измерения напряжения и тока
 
@@ -83,8 +83,7 @@ class INA219 {
 
     // Подстройка калибровочного значения
     void adjCalibration(int16_t adj) {
-        setCalibration(getCalibration() + adj);  // Читаем и модифицируем значение
-        _cal_value = _cal_value + adj;           // Обновляем внутреннюю переменную
+        setCalibration(getCalibration() + adj);  // Читаем, модифицируем и обновляем внутреннюю переменную
     }
 
     // Установка калибровочного значения
@@ -103,7 +102,7 @@ class INA219 {
     void setResolution(bool ch, uint8_t mode) {
         uint16_t cfg_register = readRegister(INA219_CFG_REG_ADDR);  // Читаем конф. регистр
         cfg_register &= ~((0b1111) << (ch ? 7 : 3));                // Сбрасываем нужную пачку бит, в зависимости от канала
-        cfg_register |= mode << (ch ? 7 : 3);                       // Пишем нужную пачку бит, в зависимости от канала
+        cfg_register |= (mode & 0b1111) << (ch ? 7 : 3);            // Пишем нужную пачку бит, в зависимости от канала
         writeRegister(INA219_CFG_REG_ADDR, cfg_register);           // Пишем новое значение конф. регистра
     }
 
@@ -154,11 +153,11 @@ class INA219 {
 
     // Чтение 16-ти битного регистра INA219
     uint16_t readRegister(uint8_t address) {
-        Wire.beginTransmission(_iic_address);        // Начинаем передачу
-        Wire.write(address);                         // Отправляем адрес
-        Wire.endTransmission();                      // Заканчиваем передачу
-        Wire.requestFrom(_iic_address, (uint8_t)2);  // Запрашиваем 2 байта
-        return Wire.read() << 8 | Wire.read();       // Клеим и возвращаем результат
+        Wire.beginTransmission(_iic_address);  // Начинаем передачу
+        Wire.write(address);                   // Отправляем адрес
+        Wire.endTransmission();                // Заканчиваем передачу
+        if (Wire.requestFrom(_iic_address, (uint8_t)2) < 2) return 0;
+        return ((uint16_t)Wire.read() << 8) | Wire.read();  // Клеим и возвращаем результат
     }
 
     // Проверка присутствия
